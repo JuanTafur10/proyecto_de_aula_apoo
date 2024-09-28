@@ -29,3 +29,14 @@ class UIConsola:
             self.mostrar_mensaje("Contraseña cambiada correctamente.")
         else:
             self.mostrar_mensaje("Error al cambiar la contraseña. Verifique los datos ingresados.")
+
+    def iniciar_sesion(self):
+            nombre_usuario = self.leer_entrada("Ingrese su nombre de usuario: ")
+            contraseña = self.leer_entrada("Ingrese su contraseña: ")
+
+            if self.sistema.validar_credenciales(nombre_usuario, contraseña):
+                self.mostrar_mensaje(self.sistema.autenticar_usuario(nombre_usuario))
+                return self.sistema.usuarios[nombre_usuario]
+            else:
+                self.mostrar_mensaje("Error: Las credenciales son incorrectas.")
+                return None
