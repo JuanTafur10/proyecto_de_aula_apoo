@@ -1,4 +1,5 @@
 from GestionDeTareas.model.GestionTareas import Sistemas
+from GestionDeTareas.model.GestionTareas import Usuario
 
 class UIConsola:
     def __init__(self, sistema: Sistemas):
@@ -15,10 +16,16 @@ class UIConsola:
         contraseña = self.leer_entrada("Ingrese una contraseña (mínimo 6 caracteres, con al menos una mayúscula, un número y un carácter especial): ")
 
         if self.sistema.crear_cuenta_usuario(nombre_usuario, contraseña):
-            self.mostrar_mensaje("Registro realizado apropiadamente. Cuenta creada.")
-            self.redirigir_a_perfil(nombre_usuario)
+            self.mostrar_mensaje("Cuenta creada exitosamente.")
         else:
-            self.mostrar_mensaje("Error al crear la cuenta. Asegúrese de que el nombre de usuario no esté en uso y que la contraseña sea válida.")
+            self.mostrar_mensaje("Error al crear la cuenta. Verifique que el nombre de usuario esté disponible y que la contraseña cumpla los requisitos.")
 
-    def redirigir_a_perfil(self, nombre_usuario: str):
-        self.mostrar_mensaje(f"Redirigiendo a la pantalla de bienvenida de {nombre_usuario}...")
+    def cambiar_contraseña(self, usuario: Usuario):
+        contraseña_actual = self.leer_entrada("Ingrese su contraseña actual: ")
+        contraseña_nueva = self.leer_entrada("Ingrese su nueva contraseña (mínimo 6 caracteres, con al menos una mayúscula, un número y un carácter especial): ")
+        confirmar = self.leer_entrada("Confirme su nueva contraseña: ")
+
+        if self.sistema.cambiar_contraseña(usuario, contraseña_actual, contraseña_nueva, confirmar):
+            self.mostrar_mensaje("Contraseña cambiada correctamente.")
+        else:
+            self.mostrar_mensaje("Error al cambiar la contraseña. Verifique los datos ingresados.")
