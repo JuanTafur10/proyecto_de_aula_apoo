@@ -13,7 +13,8 @@ def main():
         print("4. Crear Tarea")
         print("5. Editar Tarea")
         print("6. Crear Categoría")
-        print("7. Salir")
+        print("7. Mostrar Tareas por Categoría")
+        print("8. Salir")
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
@@ -36,6 +37,8 @@ def main():
         elif opcion == "6":
             ui.crear_categoria()
         elif opcion == "7":
+            ui.mostrar_tareas_por_categoria()
+        elif opcion == "8":
             print("Gracias por usar la aplicación. ¡Hasta luego!")
             break
         else:

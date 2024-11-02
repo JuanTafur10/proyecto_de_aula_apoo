@@ -42,12 +42,20 @@ class UIConsola:
                 self.mostrar_mensaje("Error: Las credenciales son incorrectas.")
                 return None
             
+    
     def crear_tarea(self):
         titulo = self.leer_entrada("Ingrese el título de la tarea: ")
         descripcion = self.leer_entrada("Ingrese la descripción de la tarea: ")
         fecha_limite = self.leer_entrada("Ingrese la fecha límite de la tarea (YYYY-MM-DD): ")
         prioridad = self.leer_entrada("Ingrese la prioridad de la tarea (alta, media, baja): ")
-        tarea = self.sistema.crear_tarea(titulo, descripcion, fecha_limite, prioridad)
+        categoria_nombre = self.leer_entrada("Ingrese la categoría de la tarea (deje en blanco para ninguna): ")
+        categoria = None
+        if categoria_nombre:
+            categoria = next((cat for cat in self.sistema.categorias if cat.nombre == categoria_nombre), None)
+            if not categoria:
+                self.mostrar_mensaje(f"Categoría '{categoria_nombre}' no encontrada. Creando nueva categoría.")
+                categoria = self.sistema.crear_categoria(categoria_nombre)
+        tarea = self.sistema.crear_tarea(titulo, descripcion, fecha_limite, prioridad, categoria)
         self.mostrar_mensaje(f"Tarea creada: {tarea}")
 
     def editar_tarea(self):
@@ -56,11 +64,39 @@ class UIConsola:
         descripcion = self.leer_entrada("Ingrese la nueva descripción de la tarea (deje en blanco para no cambiar): ")
         fecha_limite = self.leer_entrada("Ingrese la nueva fecha límite de la tarea (YYYY-MM-DD) (deje en blanco para no cambiar): ")
         prioridad = self.leer_entrada("Ingrese la nueva prioridad de la tarea (alta, media, baja) (deje en blanco para no cambiar): ")
-        tarea = self.sistema.editar_tarea(tarea_id, titulo or None, descripcion or None, fecha_limite or None, prioridad or None)
+        categoria_nombre = self.leer_entrada("Ingrese la nueva categoría de la tarea (deje en blanco para no cambiar): ")
+        categoria = None
+        if categoria_nombre:
+            categoria = next((cat for cat in self.sistema.categorias if cat.nombre == categoria_nombre), None)
+            if not categoria:
+                self.mostrar_mensaje(f"Categoría '{categoria_nombre}' no encontrada. Creando nueva categoría.")
+                categoria = self.sistema.crear_categoria(categoria_nombre)
+        tarea = self.sistema.editar_tarea(tarea_id, titulo or None, descripcion or None, fecha_limite or None, prioridad or None, categoria)
         if tarea:
             self.mostrar_mensaje(f"Tarea editada: {tarea}")
-    
+
     def crear_categoria(self):
         nombre = self.leer_entrada("Ingrese el nombre de la nueva categoría: ")
         categoria = self.sistema.crear_categoria(nombre)
         self.mostrar_mensaje(f"Categoría creada: {categoria}")
+
+    def mostrar_tareas_por_categoria(self):
+        nombre_categoria = self.leer_entrada("Ingrese el nombre de la categoría: ")
+        tareas = self.sistema.obtener_tareas_por_categoria(nombre_categoria)
+        if tareas:
+            self.mostrar_mensaje(f"Tareas en la categoría '{nombre_categoria}':")
+            for tarea in tareas:
+                self.mostrar_mensaje(str(tarea))
+        else:
+            self.mostrar_mensaje(f"No hay tareas en la categoría '{nombre_categoria}'.")
+
+    def asignar_categoria_a_tarea(self):
+        tarea_id = int(self.leer_entrada("Ingrese el ID de la tarea a la que desea asignar una categoría: "))
+        categoria_nombre = self.leer_entrada("Ingrese el nombre de la categoría: ")
+        categoria = next((cat for cat in self.sistema.categorias if cat.nombre == categoria_nombre), None)
+        if not categoria:
+            self.mostrar_mensaje(f"Categoría '{categoria_nombre}' no encontrada.")
+            return
+        tarea = self.sistema.editar_tarea(tarea_id, categoria=categoria)
+        if tarea:
+            self.mostrar_mensaje(f"Tarea actualizada con nueva categoría: {tarea}")

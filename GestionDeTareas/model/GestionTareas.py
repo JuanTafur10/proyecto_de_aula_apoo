@@ -11,6 +11,13 @@ class Usuario:
     def ingresar_nueva_contraseña(self, contraseña_nueva: str):
         self.contraseña = contraseña_nueva
 
+class Categoria:
+    def __init__(self, nombre: str):
+        self.nombre = nombre
+
+    def __str__(self):
+        return self.nombre
+
 class Sistemas:
     def __init__(self):
         self.usuarios = {}
@@ -74,56 +81,51 @@ class Sistemas:
             return False
         return True
     
-    def crear_tarea(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str):
-        nueva_tarea = Tarea(titulo, descripcion, fecha_limite, prioridad)
+    def crear_tarea(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str, categoria: Categoria = None):
+        nueva_tarea = Tarea(titulo, descripcion, fecha_limite, prioridad, categoria)
         self.tareas.append(nueva_tarea)
         print("Tarea creada exitosamente.")
         return nueva_tarea
-    
+
     def editar_tarea(self, tarea_id: int, titulo: str = None, descripcion: str = None, fecha_limite: str = None, prioridad: str = None):
-        if 0 <= tarea_id < len(self.tareas):
-            tarea = self.tareas[tarea_id]
-            if titulo:
-                tarea.titulo = titulo
-            if descripcion:
-                tarea.descripcion = descripcion
-            if fecha_limite:
-                tarea.fecha_limite = fecha_limite
-            if prioridad:
-                tarea.prioridad = prioridad
-            print("Tarea editada exitosamente.")
-            return tarea
-        else:
-            print("Error: Tarea no encontrada.")
-            return None
-    
+        for tarea in self.tareas:
+            if tarea.id == tarea_id:
+                if titulo:
+                    tarea.titulo = titulo
+                if descripcion:
+                    tarea.descripcion = descripcion
+                if fecha_limite:
+                    tarea.fecha_limite = fecha_limite
+                if prioridad:
+                    tarea.prioridad = prioridad
+                print("Tarea editada exitosamente.")
+                return tarea
+        print("Error: Tarea no encontrada.")
+        return None
+
     def crear_categoria(self, nombre: str):
-            nueva_categoria = Categoria(nombre)
-            self.categorias.append(nueva_categoria)
-            print("Categoría creada exitosamente.")
-            return nueva_categoria
+        nueva_categoria = Categoria(nombre)
+        self.categorias.append(nueva_categoria)
+        print("Categoría creada exitosamente.")
+        return nueva_categoria
+
+    def obtener_tareas_por_categoria(self, nombre_categoria: str):
+        return [tarea for tarea in self.tareas if tarea.categoria and tarea.categoria.nombre == nombre_categoria]
 
 class Tarea:
     _id_counter = 1
 
-    def __init__(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str):
+    def __init__(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str, categoria: Categoria = None):
         self.id = Tarea._id_counter
         Tarea._id_counter += 1
         self.titulo = titulo
         self.descripcion = descripcion
         self.fecha_limite = fecha_limite
         self.prioridad = prioridad
+        self.categoria = categoria
 
     def __str__(self):
-        return f"Tarea (id = {self.id}, titulo = {self.titulo}, descripcion = {self.descripcion}, fecha_limite = {self.fecha_limite}, prioridad = {self.prioridad})"
-    
-
-class Categoria:
-    def __init__(self, nombre: str):
-        self.nombre = nombre
-
-    def __str__(self):
-        return self.nombre
+        return f"Tarea (id = {self.id}, titulo = {self.titulo}, descripcion = {self.descripcion}, fecha_limite = {self.fecha_limite}, prioridad = {self.prioridad}, categoria = {self.categoria})"
 
 
 def confirmar_cambio_contraseña(self):
