@@ -11,7 +11,8 @@ def main():
         print("2. Iniciar Sesión")
         print("3. Cambiar Contraseña")
         print("4. Crear Tarea")
-        print("5. Salir")
+        print("5. Editar Tarea")
+        print("6. Salir")
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
@@ -30,10 +31,10 @@ def main():
         elif opcion == "4":
             ui.crear_tarea()
         elif opcion == "5":
+            ui.editar_tarea()
+        elif opcion == "6":
             print("Gracias por usar la aplicación. ¡Hasta luego!")
             break
-        else:
-            ui.mostrar_mensaje("Opción no válida. Intente de nuevo.")
 
 if __name__ == "__main__":
     main()

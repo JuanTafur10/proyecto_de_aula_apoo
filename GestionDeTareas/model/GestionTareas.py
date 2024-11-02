@@ -78,6 +78,23 @@ class Sistemas:
         self.tareas.append(nueva_tarea)
         print("Tarea creada exitosamente.")
         return nueva_tarea
+    
+    def editar_tarea(self, tarea_id: int, titulo: str = None, descripcion: str = None, fecha_limite: str = None, prioridad: str = None):
+        if 0 <= tarea_id < len(self.tareas):
+            tarea = self.tareas[tarea_id]
+            if titulo:
+                tarea.titulo = titulo
+            if descripcion:
+                tarea.descripcion = descripcion
+            if fecha_limite:
+                tarea.fecha_limite = fecha_limite
+            if prioridad:
+                tarea.prioridad = prioridad
+            print("Tarea editada exitosamente.")
+            return tarea
+        else:
+            print("Error: Tarea no encontrada.")
+            return None
 
 class Tarea:
     def __init__(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str):
@@ -86,7 +103,7 @@ class Tarea:
         self.fecha_limite = fecha_limite
         self.prioridad = prioridad
     def __str__(self):
-        return f"Tarea(titulo={self.titulo}, descripcion={self.descripcion}, fecha_limite={self.fecha_limite}, prioridad={self.prioridad})"
+        return f"Tarea (titulo= {self.titulo}, descripcion= {self.descripcion}, fecha_limite= {self.fecha_limite}, prioridad= {self.prioridad})"
     
 
 

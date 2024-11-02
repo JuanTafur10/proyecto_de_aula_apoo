@@ -49,3 +49,13 @@ class UIConsola:
         prioridad = self.leer_entrada("Ingrese la prioridad de la tarea (alta, media, baja): ")
         tarea = self.sistema.crear_tarea(titulo, descripcion, fecha_limite, prioridad)
         self.mostrar_mensaje(f"Tarea creada: {tarea}")
+
+    def editar_tarea(self):
+        tarea_id = int(self.leer_entrada("Ingrese el ID de la tarea a editar: "))
+        titulo = self.leer_entrada("Ingrese el nuevo título de la tarea (deje en blanco para no cambiar): ")
+        descripcion = self.leer_entrada("Ingrese la nueva descripción de la tarea (deje en blanco para no cambiar): ")
+        fecha_limite = self.leer_entrada("Ingrese la nueva fecha límite de la tarea (YYYY-MM-DD) (deje en blanco para no cambiar): ")
+        prioridad = self.leer_entrada("Ingrese la nueva prioridad de la tarea (alta, media, baja) (deje en blanco para no cambiar): ")
+        tarea = self.sistema.editar_tarea(tarea_id, titulo or None, descripcion or None, fecha_limite or None, prioridad or None)
+        if tarea:
+            self.mostrar_mensaje(f"Tarea editada: {tarea}")
