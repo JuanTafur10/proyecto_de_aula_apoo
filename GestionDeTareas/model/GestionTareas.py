@@ -93,8 +93,6 @@ class Sistemas:
                 raise ValueError('La confirmación de la nueva contraseña no coincide.')
 
             usuario.ingresar_nueva_contraseña(contraseña_nueva)
-            self.confirmar_cambio_contraseña()
-            self.redirigir_a_perfil(usuario.nombre_usuario)
             return True
         except ValueError as ve:
             print(f"Error al cambiar la contraseña: {ve}")
@@ -102,6 +100,7 @@ class Sistemas:
         except Exception as e:
             print(f"Error inesperado al cambiar la contraseña: {e}")
             return False
+
     
     def validar_nueva_contraseña(self, contraseña_nueva: str) -> bool:
         if len(contraseña_nueva) < 6:
