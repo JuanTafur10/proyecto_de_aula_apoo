@@ -131,22 +131,36 @@ class UITkinter(tk.Tk):
 
     def crear_tarea(self):
         try:
-            titulo = simpledialog.askstring("Crear Tarea", "Ingrese el título:")
-            descripcion = simpledialog.askstring("Crear Tarea", "Ingrese la descripción:")
-            fecha_limite = simpledialog.askstring("Crear Tarea", "Ingrese la fecha límite (YYYY-MM-DD):")
-            prioridad = simpledialog.askstring("Crear Tarea", "Ingrese la prioridad (alta, media, baja):")
-            categoria_nombre = simpledialog.askstring("Crear Tarea", "Ingrese la categoría (deje en blanco para ninguna):")
+            titulo = self.leer_entrada("Ingrese el título de la tarea:")
+            if not titulo or titulo.isspace():
+                raise ValueError("El título es obligatorio.")
 
+            descripcion = self.leer_entrada("Ingrese la descripción de la tarea:")
+            if not descripcion or descripcion.isspace():
+                raise ValueError("La descripción es obligatoria.")
+
+            fecha_limite = self.leer_entrada("Ingrese la fecha límite de la tarea (YYYY-MM-DD):")
+            if not fecha_limite or fecha_limite.isspace():
+                raise ValueError("La fecha límite es obligatoria.")
+
+            prioridad = self.leer_entrada("Ingrese la prioridad de la tarea (alta, media, baja):")
+            if not prioridad or prioridad.isspace():
+                raise ValueError("La prioridad es obligatoria.")
+
+            categoria_nombre = self.leer_entrada("Ingrese la categoría de la tarea (deje en blanco para ninguna):")
             categoria = None
-            if categoria_nombre:
+            if categoria_nombre and not categoria_nombre.isspace():
                 categoria = next((cat for cat in self.sistema.categorias if cat.nombre == categoria_nombre), None)
                 if not categoria:
+                    self.mostrar_mensaje(f"Categoría '{categoria_nombre}' no encontrada. Creando nueva categoría.")
                     categoria = self.sistema.crear_categoria(categoria_nombre)
 
             tarea = self.sistema.crear_tarea(titulo, descripcion, fecha_limite, prioridad, categoria)
-            messagebox.showinfo("Éxito", f"Tarea creada: {tarea}")
+            self.mostrar_mensaje(f"Tarea creada: {tarea}")
+        except ValueError as ve:
+            self.mostrar_error(f"Error: {ve}")
         except Exception as e:
-            messagebox.showerror("Error", f"Ocurrió un error al crear la tarea: {e}")
+            self.mostrar_error(f"Error inesperado: {e}")
 
     def editar_tarea(self):
         try:
