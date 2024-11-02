@@ -15,6 +15,7 @@ class Sistemas:
     def __init__(self):
         self.usuarios = {}
         self.tareas = []
+        self.categorias = []
 
     def validar_nombre_usuario(self, nombre_usuario: str) -> bool:
         return nombre_usuario not in self.usuarios
@@ -95,16 +96,34 @@ class Sistemas:
         else:
             print("Error: Tarea no encontrada.")
             return None
+    
+    def crear_categoria(self, nombre: str):
+            nueva_categoria = Categoria(nombre)
+            self.categorias.append(nueva_categoria)
+            print("Categoría creada exitosamente.")
+            return nueva_categoria
 
 class Tarea:
+    _id_counter = 1
+
     def __init__(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str):
+        self.id = Tarea._id_counter
+        Tarea._id_counter += 1
         self.titulo = titulo
         self.descripcion = descripcion
         self.fecha_limite = fecha_limite
         self.prioridad = prioridad
+
     def __str__(self):
-        return f"Tarea (titulo= {self.titulo}, descripcion= {self.descripcion}, fecha_limite= {self.fecha_limite}, prioridad= {self.prioridad})"
+        return f"Tarea (id = {self.id}, titulo = {self.titulo}, descripcion = {self.descripcion}, fecha_limite = {self.fecha_limite}, prioridad = {self.prioridad})"
     
+
+class Categoria:
+    def __init__(self, nombre: str):
+        self.nombre = nombre
+
+    def __str__(self):
+        return self.nombre
 
 
 def confirmar_cambio_contraseña(self):

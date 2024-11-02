@@ -59,3 +59,8 @@ class UIConsola:
         tarea = self.sistema.editar_tarea(tarea_id, titulo or None, descripcion or None, fecha_limite or None, prioridad or None)
         if tarea:
             self.mostrar_mensaje(f"Tarea editada: {tarea}")
+    
+    def crear_categoria(self):
+        nombre = self.leer_entrada("Ingrese el nombre de la nueva categoría: ")
+        categoria = self.sistema.crear_categoria(nombre)
+        self.mostrar_mensaje(f"Categoría creada: {categoria}")
