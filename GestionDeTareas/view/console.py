@@ -13,23 +13,55 @@ class UIConsola:
         return input(mensaje)
 
     def crear_cuenta(self):
-        nombre_usuario = self.leer_entrada("Ingrese un nombre de usuario: ")
-        contraseña = self.leer_entrada("Ingrese una contraseña (mínimo 6 caracteres, con al menos una mayúscula, un número y un carácter especial): ")
+        try:
+            nombre_usuario = self.leer_entrada("Ingrese un nombre de usuario: ")
+            if not nombre_usuario:
+                raise ValueError("El nombre de usuario es obligatorio.")
 
-        if self.sistema.crear_cuenta_usuario(nombre_usuario, contraseña):
-            self.mostrar_mensaje("Cuenta creada exitosamente.")
-        else:
-            self.mostrar_mensaje("Error al crear la cuenta. Verifique que el nombre de usuario esté disponible y que la contraseña cumpla los requisitos.")
+            contraseña = self.leer_entrada("Ingrese una contraseña (mínimo 6 caracteres, con al menos una mayúscula, un número y un carácter especial): ")
+            if not contraseña:
+                raise ValueError("La contraseña es obligatoria.")
+
+            if not self.sistema.validar_nueva_contraseña(contraseña):
+                raise ValueError("La contraseña no cumple los requisitos.")
+
+            if self.sistema.crear_cuenta_usuario(nombre_usuario, contraseña):
+                self.mostrar_mensaje("Cuenta creada exitosamente.")
+            else:
+                self.mostrar_mensaje("Error al crear la cuenta. Verifique que el nombre de usuario esté disponible y que la contraseña cumpla los requisitos.")
+        except ValueError as ve:
+            self.mostrar_mensaje(f"Error: {ve}")
+        except Exception as e:
+            self.mostrar_mensaje(f"Error inesperado: {e}")
 
     def cambiar_contraseña(self, usuario: Usuario):
-        contraseña_actual = self.leer_entrada("Ingrese su contraseña actual: ")
-        contraseña_nueva = self.leer_entrada("Ingrese su nueva contraseña (mínimo 6 caracteres, con al menos una mayúscula, un número y un carácter especial): ")
-        confirmar = self.leer_entrada("Confirme su nueva contraseña: ")
+        try:
+            contraseña_actual = self.leer_entrada("Ingrese su contraseña actual: ")
+            if not contraseña_actual:
+                raise ValueError("La contraseña actual es obligatoria.")
 
-        if self.sistema.cambiar_contraseña(usuario, contraseña_actual, contraseña_nueva, confirmar):
-            self.mostrar_mensaje("Contraseña cambiada correctamente.")
-        else:
-            self.mostrar_mensaje("Error al cambiar la contraseña. Verifique los datos ingresados.")
+            if not self.sistema.validar_contraseña_actual(usuario, contraseña_actual):
+                raise ValueError("La contraseña actual es incorrecta.")
+
+            contraseña_nueva = self.leer_entrada("Ingrese su nueva contraseña (mínimo 6 caracteres, con al menos una mayúscula, un número y un carácter especial): ")
+            if not contraseña_nueva:
+                raise ValueError("La nueva contraseña es obligatoria.")
+
+            if not self.sistema.validar_nueva_contraseña(contraseña_nueva):
+                raise ValueError("La nueva contraseña no cumple los requisitos.")
+
+            confirmar = self.leer_entrada("Confirme su nueva contraseña: ")
+            if not confirmar:
+                raise ValueError("La confirmación de la nueva contraseña es obligatoria.")
+
+            if self.sistema.cambiar_contraseña(usuario, contraseña_actual, contraseña_nueva, confirmar):
+                self.mostrar_mensaje("Contraseña cambiada correctamente.")
+            else:
+                self.mostrar_mensaje("Error al cambiar la contraseña. Verifique los datos ingresados.")
+        except ValueError as ve:
+            self.mostrar_mensaje(f"Error: {ve}")
+        except Exception as e:
+            self.mostrar_mensaje(f"Error inesperado: {e}")
 
     def iniciar_sesion(self):
             nombre_usuario = self.leer_entrada("Ingrese su nombre de usuario: ")
@@ -44,19 +76,38 @@ class UIConsola:
             
     
     def crear_tarea(self):
-        titulo = self.leer_entrada("Ingrese el título de la tarea: ")
-        descripcion = self.leer_entrada("Ingrese la descripción de la tarea: ")
-        fecha_limite = self.leer_entrada("Ingrese la fecha límite de la tarea (YYYY-MM-DD): ")
-        prioridad = self.leer_entrada("Ingrese la prioridad de la tarea (alta, media, baja): ")
-        categoria_nombre = self.leer_entrada("Ingrese la categoría de la tarea (deje en blanco para ninguna): ")
-        categoria = None
-        if categoria_nombre:
-            categoria = next((cat for cat in self.sistema.categorias if cat.nombre == categoria_nombre), None)
-            if not categoria:
-                self.mostrar_mensaje(f"Categoría '{categoria_nombre}' no encontrada. Creando nueva categoría.")
-                categoria = self.sistema.crear_categoria(categoria_nombre)
-        tarea = self.sistema.crear_tarea(titulo, descripcion, fecha_limite, prioridad, categoria)
-        self.mostrar_mensaje(f"Tarea creada: {tarea}")
+        try:
+            titulo = self.leer_entrada("Ingrese el título de la tarea: ")
+            if not titulo:
+                raise ValueError("El título es obligatorio.")
+
+            descripcion = self.leer_entrada("Ingrese la descripción de la tarea: ")
+            if not descripcion:
+                raise ValueError("La descripción es obligatoria.")
+
+            fecha_limite = self.leer_entrada("Ingrese la fecha límite de la tarea (YYYY-MM-DD): ")
+            if not fecha_limite:
+                raise ValueError("La fecha límite es obligatoria.")
+
+            prioridad = self.leer_entrada("Ingrese la prioridad de la tarea (alta, media, baja): ")
+            if not prioridad:
+                raise ValueError("La prioridad es obligatoria.")
+
+            categoria_nombre = self.leer_entrada("Ingrese la categoría de la tarea (deje en blanco para ninguna): ")
+            categoria = None
+            if categoria_nombre:
+                categoria = next((cat for cat in self.sistema.categorias if cat.nombre == categoria_nombre), None)
+                if not categoria:
+                    self.mostrar_mensaje(f"Categoría '{categoria_nombre}' no encontrada. Creando nueva categoría.")
+                    categoria = self.sistema.crear_categoria(categoria_nombre)
+
+            tarea = self.sistema.crear_tarea(titulo, descripcion, fecha_limite, prioridad, categoria)
+            self.mostrar_mensaje(f"Tarea creada: {tarea}")
+
+        except ValueError as ve:
+            self.mostrar_mensaje(f"Error: {ve}")
+        except Exception as e:
+            self.mostrar_mensaje(f"Error inesperado: {e}")
 
     def editar_tarea(self):
         tarea_id = int(self.leer_entrada("Ingrese el ID de la tarea a editar: "))
