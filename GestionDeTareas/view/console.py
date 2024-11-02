@@ -96,13 +96,7 @@ class UIConsola:
         else:
             self.mostrar_mensaje(f"No hay tareas en la categoría '{nombre_categoria}'.")
 
-    def asignar_categoria_a_tarea(self):
-        tarea_id = int(self.leer_entrada("Ingrese el ID de la tarea a la que desea asignar una categoría: "))
-        categoria_nombre = self.leer_entrada("Ingrese el nombre de la categoría: ")
-        categoria = next((cat for cat in self.sistema.categorias if cat.nombre == categoria_nombre), None)
-        if not categoria:
-            self.mostrar_mensaje(f"Categoría '{categoria_nombre}' no encontrada.")
-            return
-        tarea = self.sistema.editar_tarea(tarea_id, categoria=categoria)
-        if tarea:
-            self.mostrar_mensaje(f"Tarea actualizada con nueva categoría: {tarea}")
+    def generar_informe_pdf(self):
+        nombre_usuario = self.leer_entrada("Ingrese el nombre de usuario: ")
+        archivo_pdf = self.leer_entrada("Ingrese el nombre del archivo PDF (con extensión .pdf): ")
+        self.sistema.generar_informe_pdf(nombre_usuario, archivo_pdf)

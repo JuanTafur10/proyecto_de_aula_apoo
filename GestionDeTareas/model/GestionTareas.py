@@ -1,4 +1,6 @@
 import re
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 class Usuario:
     def __init__(self, nombre_usuario: str, contraseña: str):
@@ -17,6 +19,22 @@ class Categoria:
 
     def __str__(self):
         return self.nombre
+    
+class Tarea:
+    _id_counter = 1
+
+    def __init__(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str, categoria: Categoria = None):
+        self.id = Tarea._id_counter
+        Tarea._id_counter += 1
+        self.titulo = titulo
+        self.descripcion = descripcion
+        self.fecha_limite = fecha_limite
+        self.prioridad = prioridad
+        self.categoria = categoria
+
+    def __str__(self):
+        return f"Tarea (id = {self.id}, titulo = {self.titulo}, descripcion = {self.descripcion}, fecha_limite = {self.fecha_limite}, prioridad = {self.prioridad}, categoria = {self.categoria})"
+
 
 class Sistemas:
     def __init__(self):
@@ -87,7 +105,7 @@ class Sistemas:
         print("Tarea creada exitosamente.")
         return nueva_tarea
 
-    def editar_tarea(self, tarea_id: int, titulo: str = None, descripcion: str = None, fecha_limite: str = None, prioridad: str = None):
+    def editar_tarea(self, tarea_id: int, titulo: str = None, descripcion: str = None, fecha_limite: str = None, prioridad: str = None, categoria: Categoria = None):
         for tarea in self.tareas:
             if tarea.id == tarea_id:
                 if titulo:
@@ -98,6 +116,8 @@ class Sistemas:
                     tarea.fecha_limite = fecha_limite
                 if prioridad:
                     tarea.prioridad = prioridad
+                if categoria:
+                    tarea.categoria = categoria
                 print("Tarea editada exitosamente.")
                 return tarea
         print("Error: Tarea no encontrada.")
@@ -120,21 +140,38 @@ class Sistemas:
 
     def obtener_tareas_por_categoria(self, nombre_categoria: str):
         return [tarea for tarea in self.tareas if tarea.categoria and tarea.categoria.nombre == nombre_categoria]
+    
+    def generar_informe_pdf(self, nombre_usuario: str, archivo_pdf: str):
+        if nombre_usuario not in self.usuarios:
+            print("Error: El usuario no existe.")
+            return
 
-class Tarea:
-    _id_counter = 1
+        usuario = self.usuarios[nombre_usuario]
+        tareas_por_categoria = {}
+        for tarea in self.tareas:
+            if tarea.categoria:
+                if tarea.categoria.nombre not in tareas_por_categoria:
+                    tareas_por_categoria[tarea.categoria.nombre] = []
+                tareas_por_categoria[tarea.categoria.nombre].append(tarea)
 
-    def __init__(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str, categoria: Categoria = None):
-        self.id = Tarea._id_counter
-        Tarea._id_counter += 1
-        self.titulo = titulo
-        self.descripcion = descripcion
-        self.fecha_limite = fecha_limite
-        self.prioridad = prioridad
-        self.categoria = categoria
+        c = canvas.Canvas(archivo_pdf, pagesize=letter)
+        c.setFont("Helvetica", 12)
+        c.drawString(100, 750, f"Informe de Tareas para {nombre_usuario}")
+        y = 720
 
-    def __str__(self):
-        return f"Tarea (id = {self.id}, titulo = {self.titulo}, descripcion = {self.descripcion}, fecha_limite = {self.fecha_limite}, prioridad = {self.prioridad}, categoria = {self.categoria})"
+        for categoria, tareas in tareas_por_categoria.items():
+            c.drawString(100, y, f"Categoría: {categoria}")
+            y -= 20
+            for tarea in tareas:
+                c.drawString(120, y, f"Título: {tarea.titulo}, Descripción: {tarea.descripcion}, Fecha Límite: {tarea.fecha_limite}, Prioridad: {tarea.prioridad}")
+                y -= 20
+                if y < 50:
+                    c.showPage()
+                    c.setFont("Helvetica", 12)
+                    y = 750
+
+        c.save()
+        print(f"Informe generado en {archivo_pdf}")
 
 
 def confirmar_cambio_contraseña(self):
