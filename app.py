@@ -12,9 +12,10 @@ def main():
         print("3. Cambiar Contraseña")
         print("4. Crear Tarea")
         print("5. Editar Tarea")
-        print("6. Crear Categoría")
-        print("7. Mostrar Tareas por Categoría")
-        print("8. Salir")
+        print("6. Eliminar Tarea")
+        print("7. Crear Categoría")
+        print("8. Mostrar Tareas por Categoría")
+        print("9. Salir")
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
@@ -35,10 +36,12 @@ def main():
         elif opcion == "5":
             ui.editar_tarea()
         elif opcion == "6":
-            ui.crear_categoria()
+            ui.eliminar_tarea()
         elif opcion == "7":
-            ui.mostrar_tareas_por_categoria()
+            ui.crear_categoria()
         elif opcion == "8":
+            ui.mostrar_tareas_por_categoria()
+        elif opcion == "9":
             print("Gracias por usar la aplicación. ¡Hasta luego!")
             break
         else:

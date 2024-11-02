@@ -75,6 +75,12 @@ class UIConsola:
         if tarea:
             self.mostrar_mensaje(f"Tarea editada: {tarea}")
 
+    def eliminar_tarea(self):
+        tarea_id = int(self.leer_entrada("Ingrese el ID de la tarea a eliminar: "))
+        tarea = self.sistema.eliminar_tarea(tarea_id)
+        if tarea:
+            self.mostrar_mensaje(f"Tarea eliminada: {tarea}")
+
     def crear_categoria(self):
         nombre = self.leer_entrada("Ingrese el nombre de la nueva categoría: ")
         categoria = self.sistema.crear_categoria(nombre)

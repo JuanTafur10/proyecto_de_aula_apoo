@@ -103,6 +103,15 @@ class Sistemas:
         print("Error: Tarea no encontrada.")
         return None
 
+    def eliminar_tarea(self, tarea_id: int):
+        for tarea in self.tareas:
+            if tarea.id == tarea_id:
+                self.tareas.remove(tarea)
+                print("Tarea eliminada exitosamente.")
+                return tarea
+        print("Error: Tarea no encontrada.")
+        return None
+
     def crear_categoria(self, nombre: str):
         nueva_categoria = Categoria(nombre)
         self.categorias.append(nueva_categoria)
