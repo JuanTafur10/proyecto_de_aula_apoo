@@ -1,5 +1,6 @@
 from GestionDeTareas.model.GestionTareas import Sistemas
 from GestionDeTareas.model.GestionTareas import Usuario
+from GestionDeTareas.model.GestionTareas import Tarea
 
 class UIConsola:
     def __init__(self, sistema: Sistemas):
@@ -40,3 +41,11 @@ class UIConsola:
             else:
                 self.mostrar_mensaje("Error: Las credenciales son incorrectas.")
                 return None
+            
+    def crear_tarea(self):
+        titulo = self.leer_entrada("Ingrese el título de la tarea: ")
+        descripcion = self.leer_entrada("Ingrese la descripción de la tarea: ")
+        fecha_limite = self.leer_entrada("Ingrese la fecha límite de la tarea (YYYY-MM-DD): ")
+        prioridad = self.leer_entrada("Ingrese la prioridad de la tarea (alta, media, baja): ")
+        tarea = self.sistema.crear_tarea(titulo, descripcion, fecha_limite, prioridad)
+        self.mostrar_mensaje(f"Tarea creada: {tarea}")

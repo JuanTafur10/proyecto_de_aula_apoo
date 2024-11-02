@@ -14,6 +14,7 @@ class Usuario:
 class Sistemas:
     def __init__(self):
         self.usuarios = {}
+        self.tareas = []
 
     def validar_nombre_usuario(self, nombre_usuario: str) -> bool:
         return nombre_usuario not in self.usuarios
@@ -71,14 +72,32 @@ class Sistemas:
             not re.search(r'[!@#$%^&*(),.?":{}|<>]', contraseña_nueva)):
             return False
         return True
-        
+    
+    def crear_tarea(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str):
+        nueva_tarea = Tarea(titulo, descripcion, fecha_limite, prioridad)
+        self.tareas.append(nueva_tarea)
+        print("Tarea creada exitosamente.")
+        return nueva_tarea
 
-    def confirmar_cambio_contraseña(self):
-        print("La contraseña ha sido cambiada correctamente.")
+class Tarea:
+    def __init__(self, titulo: str, descripcion: str, fecha_limite: str, prioridad: str):
+        self.titulo = titulo
+        self.descripcion = descripcion
+        self.fecha_limite = fecha_limite
+        self.prioridad = prioridad
+    def __str__(self):
+        return f"Tarea(titulo={self.titulo}, descripcion={self.descripcion}, fecha_limite={self.fecha_limite}, prioridad={self.prioridad})"
+    
 
-    def redirigir_a_perfil(self, nombre_usuario: str):
-        print(f"Redirigiendo al perfil de {nombre_usuario}...")
-        print("Error: Las credenciales son incorrectas.")
 
-    def mostrar_mensaje_error(self):
-        print("Error: Las credenciales son incorrectas.")
+def confirmar_cambio_contraseña(self):
+    print("La contraseña ha sido cambiada correctamente.")
+
+def redirigir_a_perfil(self, nombre_usuario: str):
+    print(f"Redirigiendo al perfil de {nombre_usuario}...")
+    print("Error: Las credenciales son incorrectas.")
+
+def mostrar_mensaje_error(self):
+    print("Error: Las credenciales son incorrectas.")
+
+    
